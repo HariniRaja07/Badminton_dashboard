@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -200,7 +198,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 
 <div class="row mt-4 g-4">
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Movement Skills Analytics</h5>
 <div class="chart-container">
@@ -209,7 +207,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Technical Skills Analysis</h5>
 <div class="chart-container">
@@ -218,7 +216,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Serving & Shot Performance</h5>
 <div class="chart-container">
@@ -227,7 +225,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Mental Strength & Discipline</h5>
 <div class="chart-container">
@@ -236,7 +234,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Fitness & Court Coverage</h5>
 <div class="chart-container">
@@ -245,7 +243,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Advanced Performance Metrics</h5>
 <div class="chart-container">
@@ -254,7 +252,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Reaction & Coordination</h5>
 <div class="chart-container">
@@ -263,7 +261,7 @@ AI Powered Personalized Badminton Performance Analytics Dashboard
 </div>
 </div>
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6">
 <div class="analytics-card chart-fixed">
 <h5 class="section-title">Overall Skill Distribution</h5>
 <div class="chart-container">
@@ -376,6 +374,7 @@ const studentIndex =
 cleanedHeaders.indexOf(
 studentName.trim()
 );
+
 const criteria = [];
 
 const scores = [];
@@ -434,13 +433,7 @@ for(let i=0; i<scores.length; i++){
 
 }
 
-
-// TOTAL CRITERIA
-
 const total = validCriteria.length;
-
-
-// SPLIT EQUALLY INTO 8 CHARTS
 
 const chunkSize = Math.ceil(total / 8);
 
@@ -458,9 +451,6 @@ for(let i=0; i<total; i += chunkSize){
 
 }
 
-
-// CHART TYPES
-
 const chartTypes = [
 
     "radar",
@@ -473,9 +463,6 @@ const chartTypes = [
     "radar"
 
 ];
-
-
-// CREATE ALL CHARTS
 
 for(let i=0; i<8; i++){
 
@@ -510,7 +497,6 @@ document.getElementById(id)
 return;
 
 }
-
 
 new Chart(document.getElementById(id),{
 
@@ -617,7 +603,6 @@ strong;
 document.getElementById("weakSkills").innerText =
 weak;
 
-
 let level = "";
 
 if(average >= 8){
@@ -644,7 +629,7 @@ level;
 }
 
 
-// INTELLIGENT FEEDBACK
+// UNIQUE AI FEEDBACK
 
 function generateFeedback(criteria,scores){
 
@@ -652,48 +637,78 @@ let strengths = [];
 
 let improvements = [];
 
-for(let i=0; i<scores.length; i++){
+for(let i = 0; i < scores.length; i++){
 
     if(scores[i] >= 8){
-
         strengths.push(criteria[i]);
-
     }
 
     else if(scores[i] <= 4){
-
         improvements.push(criteria[i]);
-
     }
+
+}
+
+const positiveLines = [
+
+    "demonstrates outstanding consistency during matches.",
+    "shows excellent court awareness and smart gameplay.",
+    "has impressive learning ability and tactical understanding.",
+    "maintains strong focus and discipline during practice.",
+    "shows great attacking mindset and confidence on court.",
+    "has very good adaptability during competitive rallies.",
+    "displays strong commitment towards badminton development."
+
+];
+
+const improvementLines = [
+
+    "Additional practice sessions can improve overall stability.",
+    "Focused training will help improve match confidence.",
+    "Technical corrections can enhance tournament performance.",
+    "Better movement control can improve rally consistency.",
+    "More endurance practice will strengthen court coverage.",
+    "Reaction speed training can improve defensive recovery."
+
+];
+
+const futureLines = [
+
+    "Has strong future potential in professional badminton.",
+    "Can become a highly competitive player with regular coaching.",
+    "Shows promising growth opportunities for advanced tournaments.",
+    "Has the capability to perform excellently at higher levels.",
+    "Demonstrates positive long-term development potential."
+
+];
+
+function randomLine(arr){
+
+    return arr[Math.floor(Math.random() * arr.length)];
 
 }
 
 let feedback = "";
 
-
 if(strengths.length > 0){
 
-feedback +=
-"Demonstrates excellent performance in " +
-strengths.slice(0,3).join(", ") +
-". ";
+    feedback +=
+    studentName + " performs strongly in " +
+    strengths.slice(0,3).join(", ") +
+    " and " + randomLine(positiveLines) + " ";
 
 }
-
 
 if(improvements.length > 0){
 
-feedback +=
-"Needs additional focus on " +
-improvements.slice(0,3).join(", ") +
-" to improve tournament consistency and gameplay execution. ";
+    feedback +=
+    "Areas requiring additional attention include " +
+    improvements.slice(0,3).join(", ") +
+    ". " + randomLine(improvementLines) + " ";
 
 }
 
-
-feedback +=
-"Shows strong discipline during training sessions, positive competitive mindset, and excellent future growth potential in badminton coaching development.";
-
+feedback += randomLine(futureLines);
 
 document.getElementById("feedbackText").innerText =
 feedback;
@@ -740,6 +755,7 @@ pdf.save(studentName + "_Performance_Report.pdf");
 
 }
 
+
 // SAVE PARENT FEEDBACK
 
 function saveFeedback(){
@@ -750,9 +766,6 @@ document.getElementById("parentName").value;
 const feedback =
 document.getElementById("parentFeedback").value;
 
-
-// VALIDATION
-
 if(parentName === "" || feedback === ""){
 
 alert("Please fill all fields");
@@ -760,9 +773,6 @@ alert("Please fill all fields");
 return;
 
 }
-
-
-// FEEDBACK OBJECT
 
 const feedbackData = {
 
@@ -776,9 +786,6 @@ Date: new Date().toLocaleString()
 
 };
 
-
-// GET OLD DATA
-
 let allFeedbacks =
 
 JSON.parse(
@@ -787,13 +794,7 @@ localStorage.getItem("allFeedbacks")
 
 || [];
 
-
-// ADD NEW DATA
-
 allFeedbacks.push(feedbackData);
-
-
-// SAVE
 
 localStorage.setItem(
 
@@ -803,15 +804,9 @@ JSON.stringify(allFeedbacks)
 
 );
 
-
-// SUCCESS MESSAGE
-
 document.getElementById("feedbackMessage").innerText =
 
 "Feedback Submitted Successfully ✅";
-
-
-// CLEAR FIELDS
 
 document.getElementById("parentName").value = "";
 
@@ -821,43 +816,6 @@ document.getElementById("parentFeedback").value = "";
 
 </script>
 
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
+
 </html>
