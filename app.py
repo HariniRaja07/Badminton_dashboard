@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import random
+from fpdf import FPDF
+import tempfile
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -21,6 +23,7 @@ st.markdown("""
 
 .stApp{
     background: linear-gradient(to right,#eef2ff,#f8fafc);
+    font-family:'Segoe UI',sans-serif;
 }
 
 /* TITLE */
@@ -113,19 +116,98 @@ with st.container():
 
         st.markdown("## BHARATHRAJ PILLAI")
 
+        st.markdown("""
+### Professional Badminton Coach With 15+ Years of Coaching Excellence
+""")
+
         st.write("""
-Professional badminton coach with 15+ years of coaching excellence.
+Passionate and professional full-time badminton coach with extensive experience
+training beginner, intermediate, and advanced competitive players.
+Specialized in badminton techniques, match strategies, fitness training,
+footwork improvement, and player development.
+""")
 
-### Coaching Expertise
-- Match Strategy Development
-- Tournament Preparation
-- Fitness & Endurance Training
-- Technical Skill Development
-- Footwork & Court Coverage
-- Player Performance Analytics
+        st.write("""
+Dedicated to building discipline, confidence, stamina, leadership qualities,
+and tournament-level performance through structured coaching methods.
+""")
 
-Dedicated to developing discipline, confidence, leadership,
-mental strength, and advanced badminton performance.
+# ---------------------------------------------------
+# ABOUT COACH
+# ---------------------------------------------------
+
+st.markdown("---")
+
+st.subheader("🏸 About Coach")
+
+st.write("""
+Highly experienced badminton coach with more than 15 years of professional coaching
+experience across multiple reputed academies and sports institutions.
+Focused on creating a strong high-performance sports culture rooted in discipline,
+consistency, teamwork, sportsmanship, and game ethics.
+""")
+
+# ---------------------------------------------------
+# COACHING EXPERIENCE
+# ---------------------------------------------------
+
+st.markdown("---")
+
+st.subheader("🏸 Coaching Experience")
+
+st.markdown("""
+- **Head Coach – Hiranandani** (2014 – March 2025) – 11 Years
+
+- **Head Coach – Sai Sarvesh** (2010 – 2015) – 5 Years
+
+- **Head Coach – Opaline Olympia** (2015 – Present) – 10+ Years
+
+- **Head Coach – Humming Garden** (2015 – Present) – 10+ Years
+
+- **Head Coach – SHASU** (2023 – Present) – 2+ Years
+""")
+
+# ---------------------------------------------------
+# ACHIEVEMENTS
+# ---------------------------------------------------
+
+st.markdown("---")
+
+st.subheader("🏸 Coach Achievements")
+
+st.markdown("""
+- Successfully trained beginner to advanced-level badminton players
+
+- Produced multiple district and tournament-level performers
+
+- Expert in fitness training, match strategy, and footwork coaching
+
+- Built structured player performance monitoring systems
+
+- Mentored students in discipline, confidence, and leadership qualities
+
+- Created high-performance badminton training environments
+""")
+
+# ---------------------------------------------------
+# ABOUT BADMINTON TRAINING
+# ---------------------------------------------------
+
+st.markdown("---")
+
+st.subheader("🏸 About Badminton Training")
+
+st.write("""
+Badminton is one of the fastest sports that improves stamina,
+reflexes, concentration, agility, and mental strength.
+Regular professional coaching helps students improve discipline,
+fitness, confidence, leadership, and tournament performance.
+""")
+
+st.write("""
+Performance analysis and progress tracking help players understand
+their strengths and areas for improvement while preparing them
+for competitive-level matches.
 """)
 
 # ---------------------------------------------------
@@ -170,7 +252,7 @@ student_df["Score"] = pd.to_numeric(
 student_df = student_df.dropna()
 
 # ---------------------------------------------------
-# SPLIT DATA FOR DIFFERENT CHARTS
+# SPLIT DATA FOR CHARTS
 # ---------------------------------------------------
 
 movement_df = student_df.iloc[0:5]
@@ -286,7 +368,7 @@ with c4:
 # CHARTS
 # ---------------------------------------------------
 
-st.write("")
+st.markdown("---")
 
 col1, col2 = st.columns(2)
 
@@ -355,6 +437,8 @@ with col4:
 # ---------------------------------------------------
 # RADAR CHART
 # ---------------------------------------------------
+
+st.markdown("---")
 
 st.subheader("🏸 Advanced Performance Metrics")
 
@@ -485,17 +569,148 @@ if st.button("Submit Feedback"):
     )
 
 # ---------------------------------------------------
-# DOWNLOAD REPORT
+# PDF REPORT GENERATION
 # ---------------------------------------------------
 
-csv = student_df.to_csv(index=False)
+st.markdown("---")
 
-st.download_button(
-    label="📄 Download Personalized Report",
-    data=csv,
-    file_name=f"{selected_student}_report.csv",
-    mime="text/csv"
-)
+if st.button("📄 Generate Professional Report"):
+
+    pdf = FPDF()
+
+    pdf.add_page()
+
+    pdf.set_font("Arial", "B", 20)
+
+    pdf.cell(
+        200,
+        10,
+        txt="ALLIANCE GALLERIA",
+        ln=True,
+        align="C"
+    )
+
+    pdf.ln(10)
+
+    pdf.set_font("Arial", "B", 16)
+
+    pdf.cell(
+        200,
+        10,
+        txt=f"Student Report : {selected_student}",
+        ln=True
+    )
+
+    pdf.ln(5)
+
+    pdf.set_font("Arial", "", 12)
+
+    pdf.multi_cell(
+        0,
+        8,
+        txt=f"""
+Overall Score : {average}/10
+
+Strong Skills : {strong}
+
+Improvement Areas : {weak}
+
+Performance Level : {level}
+"""
+    )
+
+    pdf.ln(5)
+
+    pdf.set_font("Arial", "B", 14)
+
+    pdf.cell(
+        200,
+        10,
+        txt="AI Performance Analysis",
+        ln=True
+    )
+
+    pdf.ln(3)
+
+    pdf.set_font("Arial", "", 12)
+
+    pdf.multi_cell(
+        0,
+        8,
+        txt=overall_feedback
+    )
+
+    pdf.ln(3)
+
+    pdf.multi_cell(
+        0,
+        8,
+        txt=strength_feedback
+    )
+
+    pdf.ln(3)
+
+    pdf.multi_cell(
+        0,
+        8,
+        txt=improvement_feedback
+    )
+
+    pdf.ln(3)
+
+    pdf.multi_cell(
+        0,
+        8,
+        txt=future_feedback
+    )
+
+    pdf.ln(8)
+
+    pdf.set_font("Arial", "B", 14)
+
+    pdf.cell(
+        200,
+        10,
+        txt="Student Performance Scores",
+        ln=True
+    )
+
+    pdf.ln(5)
+
+    pdf.set_font("Arial", "", 11)
+
+    for index, row in student_df.iterrows():
+
+        pdf.cell(
+            130,
+            8,
+            txt=str(row["Criteria"]),
+            border=1
+        )
+
+        pdf.cell(
+            40,
+            8,
+            txt=str(row["Score"]),
+            border=1,
+            ln=True
+        )
+
+    with tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pdf"
+    ) as tmp_file:
+
+        pdf.output(tmp_file.name)
+
+        with open(tmp_file.name, "rb") as file:
+
+            st.download_button(
+                label="⬇ Download Performance PDF",
+                data=file,
+                file_name=f"{selected_student}_Performance_Report.pdf",
+                mime="application/pdf"
+            )
 
 # ---------------------------------------------------
 # FOOTER
