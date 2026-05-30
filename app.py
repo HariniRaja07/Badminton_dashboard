@@ -377,102 +377,149 @@ st.markdown("---")
 col1, col2 = st.columns(2)
 
 with col1:
-
-    fig1 = px.bar(
-        g1,
-        x="Criteria",
-        y="Score",
-        color="Score",
-        title="Movement Skills Analytics"
-    )
-
-    st.plotly_chart(
-    fig1,
-    use_container_width=True,
-    config=chart_config
-)
+    if not g1.empty:
+        fig1 = px.bar(
+            g1,
+            x="Criteria",
+            y="Score",
+            color="Score",
+            title="Movement Skills Analytics"
+        )
+        st.plotly_chart(
+            fig1,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
 with col2:
-
-    fig2 = px.line(
-        g2,
-        x="Criteria",
-        y="Score",
-        markers=True,
-        title="Technical Skills Analysis"
-    )
-
-    st.plotly_chart(
-    fig2,
-    use_container_width=True,
-    config=chart_config
-)
+    if not g2.empty:
+        fig2 = px.line(
+            g2,
+            x="Criteria",
+            y="Score",
+            markers=True,
+            title="Technical Skills Analysis"
+        )
+        st.plotly_chart(
+            fig2,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
 # ---------------------------------------------------
 
 col3, col4 = st.columns(2)
 
 with col3:
-
-    fig3 = px.area(
-        g3,
-        x="Criteria",
-        y="Score",
-        title="Fitness & Court Coverage"
-    )
-
-    st.plotly_chart(
-    fig3,
-    use_container_width=True,
-    config=chart_config
-)
+    if not g3.empty:
+        fig3 = px.area(
+            g3,
+            x="Criteria",
+            y="Score",
+            title="Fitness & Court Coverage"
+        )
+        st.plotly_chart(
+            fig3,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
 with col4:
+    if not g4.empty:
+        fig4 = px.pie(
+            g4,
+            names="Criteria",
+            values="Score",
+            title="Mental Strength & Discipline"
+        )
+        st.plotly_chart(
+            fig4,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
-    fig4 = px.pie(
-        g4,
-        names="Criteria",
-        values="Score",
-        title="Mental Strength & Discipline"
-    )
+# ---------------------------------------------------
 
-    st.plotly_chart(
-    fig4,
-    use_container_width=True,
-    config=chart_config
-)
-
-col5,col6 = st.columns(2)
+col5, col6 = st.columns(2)
 
 with col5:
-    fig5 = px.area(g5,x="Criteria",y="Score",
-                   title="Fitness & Court Coverage")
-    st.plotly_chart(fig5,use_container_width=True,
-                    config=chart_config)
+    if not g5.empty:
+        fig5 = px.area(
+            g5,
+            x="Criteria",
+            y="Score",
+            title="Fitness & Court Coverage"
+        )
+        st.plotly_chart(
+            fig5,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
 with col6:
-    fig6 = px.scatter(g6,x="Criteria",y="Score",
-                      size="Score",
-                      title="Advanced Performance Metrics")
-    st.plotly_chart(fig6,use_container_width=True,
-                    config=chart_config)
-col7,col8 = st.columns(2)
+    if not g6.empty:
+        fig6 = px.scatter(
+            g6,
+            x="Criteria",
+            y="Score",
+            title="Advanced Performance Metrics"
+        )
+        st.plotly_chart(
+            fig6,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
+
+# ---------------------------------------------------
+
+col7, col8 = st.columns(2)
 
 with col7:
-    fig7 = px.bar(g7,x="Criteria",y="Score",
-                  color="Score",
-                  title="Reaction & Coordination")
-    st.plotly_chart(fig7,use_container_width=True,
-                    config=chart_config)
+    if not g7.empty:
+        fig7 = px.bar(
+            g7,
+            x="Criteria",
+            y="Score",
+            color="Score",
+            title="Reaction & Coordination"
+        )
+        st.plotly_chart(
+            fig7,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
 
 with col8:
-    fig8 = px.pie(g8,names="Criteria",
-                  values="Score",
-                  hole=0.5,
-                  title="Overall Skill Distribution")
-    st.plotly_chart(fig8,use_container_width=True,
-                    config=chart_config)
-    
+    if not g8.empty:
+        fig8 = px.pie(
+            g8,
+            names="Criteria",
+            values="Score",
+            hole=0.5,
+            title="Overall Skill Distribution"
+        )
+        st.plotly_chart(
+            fig8,
+            use_container_width=True,
+            config=chart_config
+        )
+    else:
+        st.info("No data available")
+
 # ---------------------------------------------------
 # RADAR CHART
 # ---------------------------------------------------
@@ -481,20 +528,25 @@ st.markdown("---")
 
 st.subheader("🏸 Advanced Performance Metrics")
 
-fig9 = px.line_polar(
-    student_df.head(10),
-    r="Score",
-    theta="Criteria",
-    line_close=True
-)
+if not student_df.empty:
 
-fig9.update_traces(fill="toself")
+    fig9 = px.line_polar(
+        student_df.head(10),
+        r="Score",
+        theta="Criteria",
+        line_close=True
+    )
 
-st.plotly_chart(
-    fig9,
-    use_container_width=True,
-    config=chart_config
-)
+    fig9.update_traces(fill="toself")
+
+    st.plotly_chart(
+        fig9,
+        use_container_width=True,
+        config=chart_config
+    )
+
+else:
+    st.info("No data available for radar chart")
 # ---------------------------------------------------
 # DETAILED AI FEEDBACK
 # ---------------------------------------------------
