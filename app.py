@@ -315,7 +315,7 @@ with c1:
     </div>
 
     <div class="metric-value">
-    {average}/10
+    {average}
     </div>
     </div>
     """, unsafe_allow_html=True)
@@ -481,21 +481,20 @@ st.markdown("---")
 
 st.subheader("🏸 Advanced Performance Metrics")
 
-fig5 = px.line_polar(
-    advanced_df,
+fig9 = px.line_polar(
+    student_df.head(10),
     r="Score",
     theta="Criteria",
     line_close=True
 )
 
-fig5.update_traces(fill='toself')
+fig9.update_traces(fill="toself")
 
 st.plotly_chart(
-    fig5,
+    fig9,
     use_container_width=True,
     config=chart_config
 )
-
 # ---------------------------------------------------
 # DETAILED AI FEEDBACK
 # ---------------------------------------------------
