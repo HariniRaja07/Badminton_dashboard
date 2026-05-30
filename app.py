@@ -610,7 +610,6 @@ if st.button("Submit Feedback"):
 # ---------------------------------------------------
 # PDF REPORT GENERATION
 # ---------------------------------------------------
-
 st.markdown("---")
 
 if st.button("📄 Generate Professional Report"):
@@ -624,24 +623,14 @@ if st.button("📄 Generate Professional Report"):
     # TITLE
 
     pdf.set_font("Arial", "B", 20)
-
-    pdf.cell(
-        190,
-        12,
-        "ALLIANCE GALLERIA",
-        new_x="LMARGIN",
-        new_y="NEXT",
-        align="C"
-    )
+    pdf.cell(190, 12, "ALLIANCE GALLERIA", ln=True, align="C")
 
     pdf.set_font("Arial", "", 12)
-
     pdf.cell(
         190,
         8,
         "Professional Badminton Performance Analytics Report",
-        new_x="LMARGIN",
-        new_y="NEXT",
+        ln=True,
         align="C"
     )
 
@@ -650,21 +639,11 @@ if st.button("📄 Generate Professional Report"):
     # COACH DETAILS
 
     pdf.set_font("Arial", "B", 15)
-
-    pdf.cell(
-        190,
-        10,
-        "Coach Profile",
-        new_x="LMARGIN",
-        new_y="NEXT"
-    )
+    pdf.cell(190, 10, "Coach Profile", ln=True)
 
     pdf.set_font("Arial", "", 11)
 
-    pdf.multi_cell(
-        0,
-        8,
-        """
+    coach_text = """
 BHARATHRAJ PILLAI
 
 Professional Badminton Coach With 15+ Years of Coaching Excellence
@@ -678,20 +657,19 @@ footwork improvement, and player development.
 Dedicated to building discipline, confidence, stamina, leadership qualities,
 and tournament-level performance through structured coaching methods.
 """
-    )
+
+    pdf.multi_cell(0, 8, coach_text)
 
     pdf.ln(5)
 
     # STUDENT DETAILS
 
     pdf.set_font("Arial", "B", 15)
-
     pdf.cell(
         190,
         10,
         f"Student Report : {selected_student}",
-        new_x="LMARGIN",
-        new_y="NEXT"
+        ln=True
     )
 
     pdf.ln(3)
@@ -699,21 +677,11 @@ and tournament-level performance through structured coaching methods.
     # KPI SUMMARY
 
     pdf.set_font("Arial", "B", 14)
-
-    pdf.cell(
-        190,
-        10,
-        "Performance Summary",
-        new_x="LMARGIN",
-        new_y="NEXT"
-    )
+    pdf.cell(190, 10, "Performance Summary", ln=True)
 
     pdf.set_font("Arial", "", 11)
 
-    pdf.multi_cell(
-        0,
-        8,
-        f"""
+    summary_text = f"""
 Overall Score : {average}
 
 Strong Skills : {strong}
@@ -722,58 +690,39 @@ Improvement Areas : {weak}
 
 Performance Level : {level}
 """
-    )
+
+    pdf.multi_cell(0, 8, summary_text)
 
     pdf.ln(5)
 
     # AI ANALYSIS
 
     pdf.set_font("Arial", "B", 14)
-
-    pdf.cell(
-        190,
-        10,
-        "AI Performance Analysis",
-        new_x="LMARGIN",
-        new_y="NEXT"
-    )
+    pdf.cell(190, 10, "AI Performance Analysis", ln=True)
 
     pdf.set_font("Arial", "", 11)
 
-    pdf.multi_cell(0,8,overall_feedback)
-
+    pdf.multi_cell(0, 8, overall_feedback)
     pdf.ln(2)
 
-    pdf.multi_cell(0,8,strength_feedback)
-
+    pdf.multi_cell(0, 8, strength_feedback)
     pdf.ln(2)
 
-    pdf.multi_cell(0,8,improvement_feedback)
-
+    pdf.multi_cell(0, 8, improvement_feedback)
     pdf.ln(2)
 
-    pdf.multi_cell(0,8,future_feedback)
+    pdf.multi_cell(0, 8, future_feedback)
 
     pdf.ln(5)
 
     # FUTURE POTENTIAL
 
     pdf.set_font("Arial", "B", 14)
-
-    pdf.cell(
-        190,
-        10,
-        "Future Potential Assessment",
-        new_x="LMARGIN",
-        new_y="NEXT"
-    )
+    pdf.cell(190, 10, "Future Potential Assessment", ln=True)
 
     pdf.set_font("Arial", "", 11)
 
-    pdf.multi_cell(
-        0,
-        8,
-        f"""
+    future_text = f"""
 Based on the current badminton performance indicators,
 {selected_student} demonstrates encouraging growth potential.
 
@@ -785,38 +734,33 @@ Continued coaching, structured practice sessions and tournament
 exposure can significantly enhance future performance and help
 the student achieve higher levels of badminton excellence.
 """
-    )
+
+    pdf.multi_cell(0, 8, future_text)
 
     pdf.ln(5)
 
     # PERFORMANCE TABLE
 
     pdf.set_font("Arial", "B", 14)
-
-    pdf.cell(
-        190,
-        10,
-        "Detailed Performance Scores",
-        new_x="LMARGIN",
-        new_y="NEXT"
-    )
+    pdf.cell(190, 10, "Detailed Performance Scores", ln=True)
 
     pdf.ln(3)
 
     pdf.set_font("Arial", "B", 11)
 
-    pdf.cell(130,10,"Criteria",border=1)
-
-    pdf.cell(40,10,"Score",border=1,ln=True)
+    pdf.cell(130, 10, "Criteria", border=1)
+    pdf.cell(40, 10, "Score", border=1, ln=True)
 
     pdf.set_font("Arial", "", 10)
 
     for index, row in student_df.iterrows():
 
+        criteria = str(row["Criteria"])[:45]
+
         pdf.cell(
             130,
             8,
-            str(row["Criteria"]),
+            criteria,
             border=1
         )
 
@@ -834,10 +778,7 @@ the student achieve higher levels of badminton excellence.
 
     pdf.set_font("Arial", "I", 10)
 
-    pdf.multi_cell(
-        0,
-        8,
-        """
+    footer_text = """
 Generated by ALLIANCE GALLERIA
 
 Professional Badminton Performance Analytics System
@@ -845,7 +786,10 @@ Professional Badminton Performance Analytics System
 This report is automatically generated using student performance data,
 analytics, coaching insights and badminton development indicators.
 """
-    )
+
+    pdf.multi_cell(0, 8, footer_text)
+
+    # SAVE PDF
 
     with tempfile.NamedTemporaryFile(
         delete=False,
@@ -858,7 +802,7 @@ analytics, coaching insights and badminton development indicators.
 
             st.download_button(
                 label="⬇ Download Performance PDF",
-                data=file,
+                data=file.read(),
                 file_name=f"{selected_student}_Performance_Report.pdf",
                 mime="application/pdf"
             )
