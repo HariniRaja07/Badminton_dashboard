@@ -379,7 +379,7 @@ col1, col2 = st.columns(2)
 with col1:
 
     fig1 = px.bar(
-        movement_df,
+        g1,
         x="Criteria",
         y="Score",
         color="Score",
@@ -395,7 +395,7 @@ with col1:
 with col2:
 
     fig2 = px.line(
-        technical_df,
+        g2,
         x="Criteria",
         y="Score",
         markers=True,
@@ -415,7 +415,7 @@ col3, col4 = st.columns(2)
 with col3:
 
     fig3 = px.area(
-        fitness_df,
+        g3,
         x="Criteria",
         y="Score",
         title="Fitness & Court Coverage"
@@ -430,7 +430,7 @@ with col3:
 with col4:
 
     fig4 = px.pie(
-        mental_df,
+        g4,
         names="Criteria",
         values="Score",
         title="Mental Strength & Discipline"
