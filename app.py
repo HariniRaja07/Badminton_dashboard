@@ -249,21 +249,29 @@ student_df["Score"] = pd.to_numeric(
     errors="coerce"
 )
 
+student_df["Score"] = pd.to_numeric(
+    student_df["Score"],
+    errors="coerce"
+)
+
 student_df = student_df.dropna()
+
+student_df = student_df[
+    student_df["Score"] >= 0
+]
 
 # ---------------------------------------------------
 # SPLIT DATA FOR CHARTS
 # ---------------------------------------------------
 
-movement_df = student_df.iloc[0:5]
+groups = []
 
-technical_df = student_df.iloc[5:10]
+for i in range(0, len(student_df), 5):
+    groups.append(student_df.iloc[i:i+5])
 
-fitness_df = student_df.iloc[10:15]
-
-mental_df = student_df.iloc[15:20]
-
-advanced_df = student_df.iloc[20:25]
+while len(groups) < 8:
+    groups.append(pd.DataFrame(columns=["Criteria","Score"]))
+g1,g2,g3,g4,g5,g6,g7,g8 = groups[:8]
 
 # ---------------------------------------------------
 # KPI CALCULATIONS
@@ -271,27 +279,17 @@ advanced_df = student_df.iloc[20:25]
 
 average = round(student_df["Score"].mean(),1)
 
-strong = len(
-    student_df[
-        student_df["Score"] >= 8
-    ]
-)
+strong = len(student_df[student_df["Score"] >= 6])
+weak = len(student_df[student_df["Score"] <= 2])
 
-weak = len(
-    student_df[
-        student_df["Score"] <= 4
-    ]
-)
-
-if average >= 8:
+if average >= 6:
     level = "Excellent"
-
-elif average >= 6:
+elif average >= 4:
     level = "Good"
-
-else:
+elif average >= 2:
     level = "Developing"
-
+else:
+    level = "Beginner"
 # ---------------------------------------------------
 # STUDENT HEADER
 # ---------------------------------------------------
@@ -367,6 +365,12 @@ with c4:
 # ---------------------------------------------------
 # CHARTS
 # ---------------------------------------------------
+chart_config = {
+    "displayModeBar": False,
+    "scrollZoom": False,
+    "editable": False,
+    "staticPlot": True
+}
 
 st.markdown("---")
 
@@ -383,9 +387,10 @@ with col1:
     )
 
     st.plotly_chart(
-        fig1,
-        use_container_width=True
-    )
+    fig1,
+    use_container_width=True,
+    config=chart_config
+)
 
 with col2:
 
@@ -398,9 +403,10 @@ with col2:
     )
 
     st.plotly_chart(
-        fig2,
-        use_container_width=True
-    )
+    fig2,
+    use_container_width=True,
+    config=chart_config
+)
 
 # ---------------------------------------------------
 
@@ -416,9 +422,10 @@ with col3:
     )
 
     st.plotly_chart(
-        fig3,
-        use_container_width=True
-    )
+    fig3,
+    use_container_width=True,
+    config=chart_config
+)
 
 with col4:
 
@@ -430,10 +437,42 @@ with col4:
     )
 
     st.plotly_chart(
-        fig4,
-        use_container_width=True
-    )
+    fig4,
+    use_container_width=True,
+    config=chart_config
+)
 
+col5,col6 = st.columns(2)
+
+with col5:
+    fig5 = px.area(g5,x="Criteria",y="Score",
+                   title="Fitness & Court Coverage")
+    st.plotly_chart(fig5,use_container_width=True,
+                    config=chart_config)
+
+with col6:
+    fig6 = px.scatter(g6,x="Criteria",y="Score",
+                      size="Score",
+                      title="Advanced Performance Metrics")
+    st.plotly_chart(fig6,use_container_width=True,
+                    config=chart_config)
+col7,col8 = st.columns(2)
+
+with col7:
+    fig7 = px.bar(g7,x="Criteria",y="Score",
+                  color="Score",
+                  title="Reaction & Coordination")
+    st.plotly_chart(fig7,use_container_width=True,
+                    config=chart_config)
+
+with col8:
+    fig8 = px.pie(g8,names="Criteria",
+                  values="Score",
+                  hole=0.5,
+                  title="Overall Skill Distribution")
+    st.plotly_chart(fig8,use_container_width=True,
+                    config=chart_config)
+    
 # ---------------------------------------------------
 # RADAR CHART
 # ---------------------------------------------------
@@ -453,7 +492,8 @@ fig5.update_traces(fill='toself')
 
 st.plotly_chart(
     fig5,
-    use_container_width=True
+    use_container_width=True,
+    config=chart_config
 )
 
 # ---------------------------------------------------
@@ -461,11 +501,11 @@ st.plotly_chart(
 # ---------------------------------------------------
 
 strengths = student_df[
-    student_df["Score"] >= 8
+    student_df["Score"] >= 6
 ]["Criteria"].tolist()
 
 improvements = student_df[
-    student_df["Score"] <= 5
+    student_df["Score"] <= 2
 ]["Criteria"].tolist()
 
 overall_lines = [
@@ -580,36 +620,102 @@ if st.button("📄 Generate Professional Report"):
 
     pdf.add_page()
 
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # TITLE
+
     pdf.set_font("Arial", "B", 20)
 
     pdf.cell(
-        200,
-        10,
-        txt="ALLIANCE GALLERIA",
-        ln=True,
+        190,
+        12,
+        "ALLIANCE GALLERIA",
+        new_x="LMARGIN",
+        new_y="NEXT",
         align="C"
     )
 
-    pdf.ln(10)
-
-    pdf.set_font("Arial", "B", 16)
+    pdf.set_font("Arial", "", 12)
 
     pdf.cell(
-        200,
-        10,
-        txt=f"Student Report : {selected_student}",
-        ln=True
+        190,
+        8,
+        "Professional Badminton Performance Analytics Report",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="C"
     )
 
-    pdf.ln(5)
+    pdf.ln(8)
 
-    pdf.set_font("Arial", "", 12)
+    # COACH DETAILS
+
+    pdf.set_font("Arial", "B", 15)
+
+    pdf.cell(
+        190,
+        10,
+        "Coach Profile",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.set_font("Arial", "", 11)
 
     pdf.multi_cell(
         0,
         8,
-        txt=f"""
-Overall Score : {average}/10
+        """
+BHARATHRAJ PILLAI
+
+Professional Badminton Coach With 15+ Years of Coaching Excellence
+
+Passionate and professional full-time badminton coach with extensive experience
+training beginner, intermediate, and advanced competitive players.
+
+Specialized in badminton techniques, match strategies, fitness training,
+footwork improvement, and player development.
+
+Dedicated to building discipline, confidence, stamina, leadership qualities,
+and tournament-level performance through structured coaching methods.
+"""
+    )
+
+    pdf.ln(5)
+
+    # STUDENT DETAILS
+
+    pdf.set_font("Arial", "B", 15)
+
+    pdf.cell(
+        190,
+        10,
+        f"Student Report : {selected_student}",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.ln(3)
+
+    # KPI SUMMARY
+
+    pdf.set_font("Arial", "B", 14)
+
+    pdf.cell(
+        190,
+        10,
+        "Performance Summary",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.set_font("Arial", "", 11)
+
+    pdf.multi_cell(
+        0,
+        8,
+        f"""
+Overall Score : {average}
 
 Strong Skills : {strong}
 
@@ -621,80 +727,126 @@ Performance Level : {level}
 
     pdf.ln(5)
 
-    pdf.set_font("Arial", "B", 14)
-
-    pdf.cell(
-        200,
-        10,
-        txt="AI Performance Analysis",
-        ln=True
-    )
-
-    pdf.ln(3)
-
-    pdf.set_font("Arial", "", 12)
-
-    pdf.multi_cell(
-        0,
-        8,
-        txt=overall_feedback
-    )
-
-    pdf.ln(3)
-
-    pdf.multi_cell(
-        0,
-        8,
-        txt=strength_feedback
-    )
-
-    pdf.ln(3)
-
-    pdf.multi_cell(
-        0,
-        8,
-        txt=improvement_feedback
-    )
-
-    pdf.ln(3)
-
-    pdf.multi_cell(
-        0,
-        8,
-        txt=future_feedback
-    )
-
-    pdf.ln(8)
+    # AI ANALYSIS
 
     pdf.set_font("Arial", "B", 14)
 
     pdf.cell(
-        200,
+        190,
         10,
-        txt="Student Performance Scores",
-        ln=True
+        "AI Performance Analysis",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.set_font("Arial", "", 11)
+
+    pdf.multi_cell(0,8,overall_feedback)
+
+    pdf.ln(2)
+
+    pdf.multi_cell(0,8,strength_feedback)
+
+    pdf.ln(2)
+
+    pdf.multi_cell(0,8,improvement_feedback)
+
+    pdf.ln(2)
+
+    pdf.multi_cell(0,8,future_feedback)
+
+    pdf.ln(5)
+
+    # FUTURE POTENTIAL
+
+    pdf.set_font("Arial", "B", 14)
+
+    pdf.cell(
+        190,
+        10,
+        "Future Potential Assessment",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.set_font("Arial", "", 11)
+
+    pdf.multi_cell(
+        0,
+        8,
+        f"""
+Based on the current badminton performance indicators,
+{selected_student} demonstrates encouraging growth potential.
+
+The student shows positive development in technical execution,
+court awareness, movement efficiency, discipline, fitness,
+reaction ability and competitive readiness.
+
+Continued coaching, structured practice sessions and tournament
+exposure can significantly enhance future performance and help
+the student achieve higher levels of badminton excellence.
+"""
     )
 
     pdf.ln(5)
 
-    pdf.set_font("Arial", "", 11)
+    # PERFORMANCE TABLE
+
+    pdf.set_font("Arial", "B", 14)
+
+    pdf.cell(
+        190,
+        10,
+        "Detailed Performance Scores",
+        new_x="LMARGIN",
+        new_y="NEXT"
+    )
+
+    pdf.ln(3)
+
+    pdf.set_font("Arial", "B", 11)
+
+    pdf.cell(130,10,"Criteria",border=1)
+
+    pdf.cell(40,10,"Score",border=1,ln=True)
+
+    pdf.set_font("Arial", "", 10)
 
     for index, row in student_df.iterrows():
 
         pdf.cell(
             130,
             8,
-            txt=str(row["Criteria"]),
+            str(row["Criteria"]),
             border=1
         )
 
         pdf.cell(
             40,
             8,
-            txt=str(row["Score"]),
+            str(row["Score"]),
             border=1,
             ln=True
         )
+
+    pdf.ln(8)
+
+    # FOOTER
+
+    pdf.set_font("Arial", "I", 10)
+
+    pdf.multi_cell(
+        0,
+        8,
+        """
+Generated by ALLIANCE GALLERIA
+
+Professional Badminton Performance Analytics System
+
+This report is automatically generated using student performance data,
+analytics, coaching insights and badminton development indicators.
+"""
+    )
 
     with tempfile.NamedTemporaryFile(
         delete=False,
@@ -711,7 +863,6 @@ Performance Level : {level}
                 file_name=f"{selected_student}_Performance_Report.pdf",
                 mime="application/pdf"
             )
-
 # ---------------------------------------------------
 # FOOTER
 # ---------------------------------------------------
