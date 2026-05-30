@@ -215,6 +215,7 @@ for competitive-level matches.
 # ---------------------------------------------------
 
 df = pd.read_excel("badminton.xlsx")
+df.replace(33, 3, inplace=True)
 
 students = list(df.columns[1:])
 
