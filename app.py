@@ -391,8 +391,7 @@ with col1:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+ 
 
 with col2:
     if not g2.empty:
@@ -408,8 +407,7 @@ with col2:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 # ---------------------------------------------------
 
@@ -428,8 +426,7 @@ with col3:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 with col4:
     if not g4.empty:
@@ -444,8 +441,7 @@ with col4:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 # ---------------------------------------------------
 
@@ -464,8 +460,7 @@ with col5:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 with col6:
     if not g6.empty:
@@ -480,8 +475,7 @@ with col6:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 # ---------------------------------------------------
 
@@ -501,8 +495,7 @@ with col7:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 with col8:
     if not g8.empty:
@@ -518,8 +511,7 @@ with col8:
             use_container_width=True,
             config=chart_config
         )
-    else:
-        st.info("No data available")
+
 
 # ---------------------------------------------------
 # RADAR CHART
@@ -546,8 +538,6 @@ if not student_df.empty:
         config=chart_config
     )
 
-else:
-    st.info("No data available for radar chart")
 # ---------------------------------------------------
 # DETAILED AI FEEDBACK
 # ---------------------------------------------------
